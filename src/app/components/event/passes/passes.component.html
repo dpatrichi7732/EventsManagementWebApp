@@ -1,0 +1,51 @@
+<div class="spinner-container" *ngIf="isLoading">
+    <app-spinner></app-spinner>
+</div>
+
+<div *ngIf="!isLoading">
+    <div *ngIf="error">
+        <app-errormessage
+            [serverErrorMessage]="error.message"
+            [errorMessageTranslationKey]="error.localizationKey">
+        </app-errormessage>
+    </div>
+
+    <div *ngIf="passes">
+        <p *ngIf="passes.length === 0" class="text-center" [appTranslate]="'NoPassesEvent'">No passes are associated to this event.</p>
+        <div *ngIf="passes.length > 0" class="container mb-4">
+            <div class="filters mr-3 ml-3">
+                <div class="row">
+                    <div class="input-group m-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="passSelect" [appTranslate]="'SelectAPass'">Select a
+                                pass</label>
+                        </div>
+                        <select [(ngModel)]="selectedPass" role="tablist" id="passSelect" class="custom-select">
+                            <option *ngFor="let pass of passes" [ngValue]="pass" role="tab">
+                                <span>{{ pass.passName }} (</span>
+                                <span *ngIf="pass.numberOfPassesLeft > 0">{{ pass.currencySymbol }}{{ pass.price }}</span>
+                                <span *ngIf="pass.numberOfPassesLeft <= 0" [appTranslate]="'SoldOut'">Sold Out</span>
+                                <span>)</span>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="selectedPass" class="container">
+            <div *ngIf="selectedPass.sessions && selectedPass.sessions.length > 0">
+                <h4 class="m-3">
+                    <span [appTranslate]="'SessionsIncludedInPass'">Sessions included in Pass</span>
+                    <span> ({{ selectedPass.sessions.length }})</span>
+                </h4>
+                <app-sessions-list-view 
+                    [sessions]="selectedPass.sessions" 
+                    [readableEventId]="readableEventId">
+                </app-sessions-list-view>
+            </div>
+            <p *ngIf="!selectedPass.sessions || selectedPass.sessions.length === 0" class="m-5">
+                <span [appTranslate]="'NoSessionsAssociated'">There are no sessions associated with this pass.</span>
+            </p>
+        </div>
+    </div>
+</div>

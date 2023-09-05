@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#ms_captcha_holder a {
+    color: #0071EB;
+}
+
+.badge-primary {
+    background-color: #0071EB !important;
+}
+
+body.modal-open {
+    overflow: hidden;
+    position:fixed;
+    width: 100%;
+}
+
+.modal-header {
+    border-bottom: 0 none !important;
+}

@@ -1,0 +1,11 @@
+<section *ngIf="isSessionCartEnabled" class="m-2 mb-3">
+    <h3 class="h4" [appTranslate]="'SelectedSessions'">Selected Sessions</h3>
+    <app-sessions-list-view
+        [readableEventId]="readableEventId"
+        [sessions]="sessionsInCart$ | async"
+        [isEventWaitlisted]="event.showWaitlist"
+        [eventTimezone]="event.timeZone"
+        [cntActiveAttendeeRegistrations]="attendees$.length | async"
+        class="selected-sessions">
+    </app-sessions-list-view>
+</section>

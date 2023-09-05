@@ -1,0 +1,56 @@
+<div class='checkout mt-5'>
+    <div *ngIf="error" class="container">
+        <app-errormessage
+            [serverErrorMessage]="error.message"
+            [errorMessageTranslationKey]="error.localizationKey">
+        </app-errormessage>
+    </div>
+
+
+    <div class='card col-md-10 offset-md-1 col-xl-8 offset-xl-2'>
+        <div class="row">
+            <div class="card-header">
+                <h2 class="card-title"><span [appTranslate]="'DemoPaymentGatewayPageTitle'">Demo Payment Gateway</span></h2>
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-md-6 p-2">
+                            <h3 class="h4" [appTranslate]="'OrderSummary'">Order Summary</h3>
+                            <b [appTranslate]="'Description'">Description:</b> Event pass<br>
+                            <b [appTranslate]="'Amount'">Amount:</b> {{ currencySymbol }}{{ total }}
+                        </div>
+
+                        <div class="col-12 col-md-6 p-2">
+                            <h3 class="h4" [appTranslate]="'PaymentDetails'">Payment details</h3>
+                            <div>
+                                <div>
+                                    <b [appTranslate]="'CardNumber'">Card number:</b> xxxx-xxxx-xxxx-xxxx
+                                </div>
+                                <div>
+                                    <b [appTranslate]="'CardHolder'">Card holder:</b> Name &amp; Last Name
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class='payment-actions'>
+                    <div>
+                        <button (click)="cancel()" class='btn btn-secondary btn-lg'>
+                            <span [appTranslate]="'CancelPayment'">Cancel Payment</span>
+                        </button>
+                    </div>
+                    <div>
+                        <button (click)="finalizePurchase()" class='btn btn-primary btn-lg makePayment'>
+                            <span *ngIf="!registrationInProgress" [appTranslate]="'EmulatePayment'"><span class="fa fa-shopping-cart"></span>Emulate Payment</span>
+                            <span *ngIf="registrationInProgress" [appTranslate]="'Processing'"><span class="fa fa-spinner fa-spin"></span>Processing</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

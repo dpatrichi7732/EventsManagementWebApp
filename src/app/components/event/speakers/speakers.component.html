@@ -1,0 +1,82 @@
+<div class="spinner-container" *ngIf="isLoading">
+    <app-spinner></app-spinner>
+</div>
+
+<div *ngIf="!isLoading">
+    <div *ngIf="error">
+        <app-errormessage
+            [serverErrorMessage]="error.message"
+            [errorMessageTranslationKey]="error.localizationKey">
+        </app-errormessage>
+    </div>
+    <div *ngIf="speakers">
+        <div #speakerDetails class="container">
+            <div class="speaker-details" *ngIf="speaker">
+                <div class="row mt-5">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="speaker-static-image mb-3">
+                                    <img src="{{ imageHelper.getImage(speaker.image, speaker.imageUrl) }}" alt="{{speaker.name}}" title="{{speaker.name}}" defaultSrc="{{ imageHelper.getImageUrl(defaultImageUrl) }}" />
+                                </div>
+                            </div>
+                            <div class="col speaker-contact-information">
+                                <h3 class="text-center">{{ speaker.name }} <span *ngIf="speaker.title">, {{ speaker.title }} </span></h3>
+                            </div>
+                            <div *ngIf="speaker.about != null && speaker.about != ''" class="speaker-about mt-5 mb-5" id="aboutDiv">
+                                {{ speaker.about }}
+                            </div>
+                            <div name="speaker-links" class="col-md-12 text-center mb-3 speaker-links-container">
+                                <span *ngIf="speaker.website" class="col-md-1">
+                                    <a href="{{ speaker.website }}" target="blank" class="x-hidden-focus" label="Website">
+                                        <i class="fa fa-globe" aria-hidden="true"></i>
+                                    </a>
+                                </span>
+                                <span *ngIf="speaker.blog" class="col-md-1">
+                                    <a href="{{ speaker.blog }}" target="blank" class="x-hidden-focus">
+                                        <i class="fa fa-book" aria-hidden="true"></i>
+                                    </a>
+                                </span>
+                                <span *ngIf="speaker.linkedin" class="col-md-1">
+                                    <a href="{{ speaker.linkedin }}" target="blank" class="x-hidden-focus">
+                                        <i class="fa fa-linkedin-square" aria-hidden="true"></i>
+                                    </a>
+                                </span>
+                                <span *ngIf="speaker.twitter" class="col-md-1">
+                                    <a href="{{ speaker.twitter }}" target="blank" class="x-hidden-focus">
+                                        <i class="fa fa-twitter-square" aria-hidden="true"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <app-sessions-list-view 
+                        [sessions]="speaker.sessions" 
+                        [readableEventId]="readableEventId">
+                    </app-sessions-list-view>
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+        <div class="container event-speakers-container">
+            <p *ngIf="speakers.length == 0" [appTranslate]="'NoSpeakersEvent'">No speakers are associated to this event.</p>
+            <div *ngIf="speakers.length > 0" class="row speaker">
+                <div id="{{ speaker.id }}" class="col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let speaker of speakers" tabindex="0">
+                    <div class="speaker-container">
+                        <div class="speaker-image" (click)="selectSpeaker(speaker)">
+                            <img src="{{ imageHelper.getImage(speaker.image, speaker.imageUrl) }}" alt="{{speaker.name}}" title="{{speaker.name}}" defaultSrc="{{ imageHelper.getImageUrl(defaultImageUrl) }}"/>
+                        </div>
+                        <div class="speaker-name">
+                            {{ speaker.name }}
+                        </div>
+                        <div class="speaker-title">
+                            {{ speaker.title }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

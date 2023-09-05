@@ -1,0 +1,73 @@
+﻿.page-header {
+    margin: 42px 0 21px;
+}
+
+a
+{
+    color: #006FE6;
+}
+
+h3 {
+    display: inline-block;
+}
+
+.input-group.mb-3 {
+    width: auto !important;
+    float: right;
+    padding-right: 5px;
+}
+
+input {
+    border-right: none !important;
+}
+
+.wrapper-searchsort {
+    display: inline-flex;
+    float: right;
+}
+
+@media only screen and (max-width: 991px) {
+    .wrapper-searchsort  {
+       float: none;
+       width: 100%;
+       display: flex;
+       margin-top: 15px;
+    }
+  }
+
+.input-group-text {
+    background-color: transparent !important;
+    border-left: none !important;
+}
+
+.d-inline-block {
+    color: #0071EB !important;
+}
+
+.btn-outline-primary {
+    color: #495057;
+    border-color: #495057;
+}
+
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #005BBD;
+    border-color: #0062cc;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
+  .show > .btn-outline-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #0062cc;
+    border-color: #005cbf;
+}
+
+.btn-outline-primary:focus { 
+    outline: 1px dashed transparent; 
+    outline-offset: 2px; 
+}
+
+.page-header {
+    padding: 0 30px;
+}
+

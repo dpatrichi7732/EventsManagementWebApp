@@ -1,0 +1,181 @@
+.sessions-spacer {
+    height: 100%;
+    width:100%;
+}
+
+.registration-form-sessions-wrapper {
+    position: relative;
+    min-height: 90%;
+    max-height: 90%;
+    overflow: auto;
+    padding-right: 0px;
+}
+
+
+.form-registration-wrapper {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.registration-form {
+    margin:auto;
+    width:100%;
+}
+
+.form-waitlist-alert {
+    flex: auto;
+}
+
+.marketing-form-container {
+    flex-direction: column;
+}
+
+.centered {
+    margin: auto;
+}
+
+.waitlist-checkbox-wrapper {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.checkout-container {
+    padding-top: 2em;
+    float: right;
+}
+
+.page-header {
+    padding-top: 30px;
+    margin: 42px 0 21px;
+}
+
+.waitlist-radio {
+    display: flex;
+}
+
+h4 {
+    margin-top: 50px;
+}
+
+.alternate-row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.spinner-container {
+    min-height: 1000px;
+    padding-top: 450px;
+}
+
+.full-size-spinner-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+}
+
+.field-container {
+    padding: 1em 0;
+}
+
+.field-container p {
+    margin-bottom: 0;
+}
+
+.checkboxes-container {
+    padding-left: 1em;
+}
+
+.required::after {
+    content: ' *';
+    color: red;
+}
+
+.notVisible {
+    display: none;
+}
+
+.checkout .card .card-title {
+    text-align: center;
+}
+
+.checkout .card .card-body {
+    position: relative;
+}
+
+.checkout .card .card-header,
+.checkout .card .card-footer {
+    width: 100%;
+}
+
+.waitlist .row,
+.custom-registration-fields .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.waitlist .auto-register-header {
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #006ADB;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #005BBD;
+    border-color: #0062cc;
+}
+
+.btn-primary:focus { 
+    outline: 1px dashed transparent; 
+    outline-offset: 2px; 
+    border-color: #2D90FB !important;
+    box-shadow: 0 0 0 0.2rem #2D90FB !important;
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    background-color: #0056B3;
+  }
+
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
+  .show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #0062cc;
+    border-color: #005cbf;
+}
+
+@media (min-width: 401px) {
+    .checkout .registered-attendee-list {
+        min-width: 400px;
+    }
+}
+
+
+@media (min-width: 576px) {
+    .registration-form-sessions-wrapper {
+        position: absolute;
+        left: 0px;
+        min-height: 90%;
+        max-height: 90%;
+        overflow: auto;
+        border-right: 1px solid rgba(0,0,0,.125);
+        padding-right: 0px;
+    }
+
+    .marketing-form-container {
+        display: flex;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        flex-direction: row;
+    }
+
+    .registration-form {
+        padding-left: 40px;
+    }
+          
+}

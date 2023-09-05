@@ -1,0 +1,34 @@
+<div class="spinner-container" *ngIf="cntActiveDataRetrievals > 0">
+    <app-spinner></app-spinner>
+</div>
+
+<div *ngIf="cntActiveDataRetrievals === 0">
+    <div *ngIf="error">
+        <app-errormessage
+            [serverErrorMessage]="error.message"
+            [errorMessageTranslationKey]="error.localizationKey">
+        </app-errormessage>
+    </div>
+
+    <div *ngIf="sessionTracks && cntActiveDataRetrievals === 0" class="container">
+        <p *ngIf="sessionTracks.length === 0" class="text-center" [appTranslate]="'NoSessionTracksEvent'">No session tracks are associated to this event.</p>
+
+        <div *ngIf="sessionTracks.length > 0" class="filters mr-3 ml-3 mb-4">
+            <div class="row">
+                <div class="select-date col-sm-6 col-md-4 offset-sm-6 offset-md-8">
+                    <select class="custom-select" (ngModelChange)="loadSessionsInTrack($event)" role="tablist" [(ngModel)]="selectedSessionTrackId">
+                        <option *ngFor="let track of sessionTracks" value="{{track.id}}" role="tab">
+                            {{ track.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="container" *ngIf="sessionsInSelectedTrack">
+            <app-sessions-list-view 
+            [sessions]="sessionsInSelectedTrack" 
+            [readableEventId]="readableEventId">
+        </app-sessions-list-view>
+        </div>
+    </div>
+</div>

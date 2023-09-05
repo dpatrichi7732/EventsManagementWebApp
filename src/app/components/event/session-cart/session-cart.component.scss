@@ -1,0 +1,81 @@
+.session-cart-backdrop {
+    z-index: 499;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.session-cart {
+    display: flex;
+    background-color: white;
+    position: fixed;
+    z-index: 500;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: auto;
+    padding: 0;
+    max-width: 500px;
+    min-width: 0;
+    width: 100%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow: hidden;
+
+    .sessions-wrapper {
+        flex: 1;
+        display: flex;
+        overflow-y: auto;
+    }
+
+    .footer {
+        margin-top: auto;
+    }
+}
+
+.modal-header {
+    border-bottom: 0 none !important;
+}
+
+.session-cart-opener {
+    position: fixed;
+    top: 50%;
+    bottom: 0;
+    right: 0;
+    transform: rotate(-90deg) translate(-100%);
+
+    .btn {
+        height: 60px;
+    }
+
+    .btn-primary {
+        background-color: #006ADB;
+    }
+    
+    .btn-primary:hover {
+        color: #fff;
+        background-color: #005BBD;
+        border-color: #0062cc;
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
+      .show > .btn-primary.dropdown-toggle {
+        color: #fff;
+        background-color: #0062cc;
+        border-color: #005cbf;
+    }
+    
+    .btn-primary:focus { 
+        outline: 1px dashed transparent; 
+        outline-offset: 2px; 
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
+    .show > .btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
+    }
+}
+

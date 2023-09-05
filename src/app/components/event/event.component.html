@@ -1,0 +1,81 @@
+<div class="m-5" *ngIf="!event && !error">
+    <app-spinner></app-spinner>
+</div>
+
+<div *ngIf="error">
+    <app-errormessage
+        [serverErrorMessage]="error.message"
+        [errorMessageTranslationKey]="error.localizationKey">
+    </app-errormessage>
+</div>
+
+<ng-container *ngIf="event && !error">
+    <div class="container event-banner" [style.background-image]="'url(' + getBannerImage() + ')'">
+        <ng-container *ngIf="event">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="section-landing-heading">{{ event.eventName }}</h1>
+                    <h3 class="event-date"> {{ formatStartDate() }}</h3>
+                    <h3 class="event-location">{{ event.building ? event.building.name : '' }}</h3>
+                </div>
+            </div>
+            <div class="row register-container" id="register-now">
+                <button
+                    *ngIf="!isSessionCartAllowed && canUserRegister()"
+                    [routerLink]="['registration']"
+                    [queryParams]="{id: event.readableEventId}"
+                    class="btn btn-primary btn-lg">
+                    <span class='fa fa-calendar'></span> <span class="icon-padding" [appTranslate]="'RegisterNow'">Register Now</span>
+                </button>
+                <button
+                    *ngIf="isSessionCartAllowed && canUserRegister()"
+                    (click)="registerForSessions()"
+                    class="btn btn-primary btn-lg">
+                    <span class='fa fa-calendar'></span> <span class="icon-padding" [appTranslate]="'RegisterNow'">Register Now</span>
+                </button>
+            </div>
+        </ng-container>
+    </div>
+
+    <div *ngIf="!canUserRegister()" class="alert alert-warning container event-data-container-warning" role="alert">
+        {{event.websiteMessage}}
+    </div>
+
+    <ng-container *ngIf="event">
+        <div class="container event-description-container mt-4">
+            {{ event.description }}
+        </div>
+    </ng-container>
+
+    <div [hidden]="!event" class="container event-data-container mt-4">
+        <ul class="nav nav-tabs nav-justified">
+            <li *ngIf="sessions && sessions.length > 0" class="nav-item">
+                <a [routerLink]="['/event', EventDetailSections.Sessions]" [queryParams]="{ id: readableEventId}"
+                    [appTranslate]="'Sessions'" routerLinkActive="active" class="nav-link" id="btn-show-sessions-list">Sessions</a>
+            </li>
+            <li *ngIf="showSessionTracks" class="nav-item">
+                <a [routerLink]="['/event', EventDetailSections.SessionTracks]" [queryParams]="{ id: readableEventId}"
+                    [appTranslate]="'SessionTracks'" routerLinkActive="active" class="nav-link" id="btn-show-sessions-tracks-list">Session
+                    Tracks</a>
+            </li>
+            <li *ngIf="showSpeakers" class="nav-item">
+                <a [routerLink]="['/event', EventDetailSections.Speakers]" [queryParams]="{id: readableEventId}"
+                    [appTranslate]="'Speakers'" routerLinkActive="active" class="nav-link" id="btn-show-speakers-list">Speakers</a>
+            </li>
+            <li *ngIf="showPasses" class="nav-item">
+                <a [routerLink]="['/event', EventDetailSections.PassInformation]" [queryParams]="{id: readableEventId }"
+                    [appTranslate]="'PassInformation'" routerLinkActive="active" class="nav-link" id="btn-show-pass-list">Pass
+                    Information</a>
+            </li>
+        </ul>
+        <div class='mt-4'>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+
+    <app-sponsors [readableEventId]="readableEventId" [renderOnZeroSponsorships]=false></app-sponsors>
+</ng-container>
+
+<aside>
+    <app-session-cart [readableEventId]="readableEventId"></app-session-cart>
+</aside>

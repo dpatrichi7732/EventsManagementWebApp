@@ -1,0 +1,148 @@
+<!-- Read only mode -->
+<div *ngIf="!editing" class="list-group-item list-group-item-action p-3">
+    <div class="row justify-content-around">
+        <div class="col-9">
+            <h5>
+                <span class="mr-2">
+                    <span *ngIf="isJapanese">{{ attendee.lastName }} </span>
+                    <span>{{ attendee.firstName }} </span>
+                    <span *ngIf="!isJapanese">{{ attendee.lastName }}</span>
+                </span>
+            </h5>
+            <div class="h6" *ngIf="getCntOfWaitlistedSessionsForAttendee() > 0">
+                <span class="badge badge-primary text">
+                    <span>{{ getCntOfWaitlistedSessionsForAttendee() }} </span>
+                    <span [appTranslate]="'WaitlistedSessions'">waitlisted session(s)</span>
+                </span>
+            </div>
+
+            <p *ngIf="attendee.passId">{{ passDisplayString(attendee.passId) }}</p>
+            <small class="mb-0">{{ attendee.email }}</small>
+            <p *ngIf="attendee.responses != null && attendee.responses.length > 0">
+                <small class="mb-0" [appTranslate]="'AdditionalInformationAvailable'">Additional information available</small>
+            </p>
+            <p *ngIf="getCntOfWaitlistedSessionsForAttendee() > 0" class="mb-1">
+                <small class="text-muted font-weight-light" [appTranslate]="'AttendeeHasWaitlistRegistrationsInfo'">This registrant is on the waitlist for one or more sessions.</small>
+            </p>
+            <p *ngIf="enableAutoRegistrationSelection && attendee.autoRegister" class="mb-1">
+                <small class="text-muted font-weight-light" [appTranslate]="'AttendeeAutoRegistrationInfo'">This attendee will be automatically registered as soon as there is capacity available.</small>
+            </p>
+        </div>
+
+        <div class="col-2 p-0 align-self-center">
+            <button class="control-btn" (click)="switchToEdit(attendee)" title="{{ translateLabel('EditAttendee', 'Edit attendee') | async }} {{attendee.firstName}} {{attendee.lastName}}">
+                <span class="fa fa-edit"></span>
+            </button>
+            <button class="control-btn" #removeAttendeeButton (click)="open()" *ngIf="!placeholder" title="{{ translateLabel('RemoveAttendee', 'Remove attendee') | async }} {{attendee.firstName}} {{attendee.lastName}}">
+                <span class="fa fa-trash icon-padding"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Editing mode -->
+<form *ngIf="editing" #attendeeForm="ngForm" (ngSubmit)="confirmEdit(attendeeForm)" novalidate>
+    <div class="form-row">
+        <div class="col-md-6 mb-3" *ngIf="isJapanese">
+            <label class="input-label" for="attendeesLastName" [appTranslate]="'LastName'"> {{ translateLabel('LastName', 'Last Name') | async }} </label>
+            <label class="input-label">*</label>
+            <input id="attendeesLastName" #lastName type="text" required class="form-control" aria-label="Attendee's last name" name="lastName" placeholder="{{ translateLabel('EnterLastName', 'Enter your last name') | async }}" [ngModel]="attendee.lastName" #lastName="ngModel"/>
+            <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger">
+                <div *ngIf="lastName.errors.required">
+                    <span [appTranslate]="'LastNameRequired'" role="alert">Last Name is required.</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label class="input-label" for="attendeesFirstName" [appTranslate]="'FirstName'"> {{ translateLabel('FirstName', 'First Name') | async }} </label>
+            <label class="input-label">*</label>
+            <input id="attendeesFirstName" #firstName type="text" required class="form-control" maxlength="50" aria-label="Attendee's first name" name="firstName" placeholder="{{ translateLabel('EnterFirstName', 'Enter your first name') | async }}" [ngModel]="attendee.firstName" #name="ngModel"/>
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                <div *ngIf="name.errors.required">
+                    <span [appTranslate]="'FirstNameRequired'" role="alert">First Name is required.</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3" *ngIf="!isJapanese">
+            <label class="input-label" for="attendeesLastName" [appTranslate]="'LastName'"> {{ translateLabel('LastName', 'Last Name') | async }} </label>
+            <label class="input-label">*</label>
+            <input id="attendeesLastName" type="text" required class="form-control" aria-label="Attendee's last name" maxlength="50" name="lastName" placeholder="{{ translateLabel('EnterLastName', 'Enter your last name') | async }}" [ngModel]="attendee.lastName" #lastName="ngModel"/>
+            <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger">
+                <div *ngIf="lastName.errors.required">
+                    <span [appTranslate]="'LastNameRequired'" role="alert">Last Name is required.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="input-label" for="attendeesEmail" [appTranslate]="'EmailAddress'"> {{ translateLabel('EmailAddress', 'Email address') | async }} </label>
+        <label class="input-label">*</label>
+        <input id="attendeesEmail" type="email" required email class="form-control" aria-label="Attendee's email address" maxlength="100" name="email" placeholder="{{ translateLabel('EnterEmailAddress', 'Enter your email address') | async }}" [ngModel]="attendee.email" #email="ngModel"/>
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+            <div *ngIf="email.errors.email">
+                <span [appTranslate]="'EmailInvalid'" role="alert">Please enter a valid email address.</span>
+            </div>
+            <div *ngIf="email.errors.required">
+                <span [appTranslate]="'EmailRequired'" role="alert">Email is required.</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" *ngIf="passes && passes.length > 0 && !waitlisted">
+        <select name="passId" required class="form-control" [ngModel]="attendee.passId">
+            <option disabled value="" [appTranslate]="'SelectAPass'">Select a pass</option>
+            <option *ngFor="let pass of passes" [value]="pass.passId" [attr.disabled]="pass.numberOfPassesLeft > pass.passesUsed || waitlisted ? null : ''">
+                {{ pass.passName + ' (' + pass.currencySymbol + pass.price + ')' }}
+                <div *ngIf="pass.numberOfPassesLeft == 0"> - <span [appTranslate]="'SoldOut'">Sold out</span></div>
+            </option>
+        </select>
+    </div>
+
+    <div *ngIf="enableAutoRegistrationSelection">
+        <div class="custom-control custom-radio">
+            <input
+                type="radio"
+                id="autoRegisterEnabledRadioInline"
+                name="isAutoRegisterEnabled"
+                class="custom-control-input"
+                [(ngModel)]="attendee.autoRegister"
+                [value]="true"
+                (change)="attendee.autoRegister = true">
+            <label class="custom-control-label" for="autoRegisterEnabledRadioInline" [appTranslate]="'EnableAutoRegisterRadioButtonText'">Auto-register and notify when space becomes available</label>
+        </div>
+        <div class="custom-control custom-radio">
+            <input
+                type="radio"
+                id="autoRegisterDisabledRadioInline"
+                name="isAutoRegisterEnabled"
+                class="custom-control-input"
+                [(ngModel)]="attendee.autoRegister"
+                [value]="false"
+                (change)="attendee.autoRegister = false">
+            <label class="custom-control-label" for="autoRegisterDisabledRadioInline" [appTranslate]="'DisableAutoRegisterRadioButtonText'">Notify, but don't auto-register, when space becomes available</label>
+        </div>
+    </div>
+
+    <app-custom-registration-fields #customRegistrationFieldsComponent [customRegistrationFields]="customRegistrationFieldsCopy"
+        [existingResponses]="attendee.responses">
+    </app-custom-registration-fields>
+
+    <div class="controls-cell text-center">
+        <button *ngIf="showAddAnotherAttendee" id="btn-add-another-attendee" type="submit"
+                [disabled]="!(attendeeForm.valid && customRegistrationFieldsComponent.areRegistrationFieldsValid())"
+                class="btn btn-outline-secondary m-2"
+                (click)="changeFocus()"
+                title="{{ placeholder ? (translateLabel('AddAnotherAttendee', 'Add another attendee') | async) : (translateLabel('SaveChanges', 'Save changes') | async) }}">
+            <span *ngIf="placeholder" [appTranslate]="'AddAnotherAttendee'">Add another attendee</span>
+            <span *ngIf="!placeholder" [appTranslate]="'SaveChanges'">Save changes</span>
+        </button>
+        <button *ngIf="!placeholder"
+                class="control-btn m-2"
+                (click)="cancelEdit()"
+                title="{{ translateLabel('DiscardChanges', 'Discard changes') | async }}">
+            <button type="button" class="btn btn-outline-danger" [appTranslate]="'DiscardChanges'">Discard changes</button>
+        </button>
+    </div>
+
+    <app-session-selection [readableEventId]="readableEventId"></app-session-selection>
+</form>

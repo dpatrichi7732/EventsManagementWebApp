@@ -1,0 +1,57 @@
+<div class="spinner-container m-5" *ngIf="isLoading">
+    <app-spinner></app-spinner>
+</div>
+
+
+<div *ngIf="!isLoading">
+    <div class="container">
+        <div class="page-header">
+            <h3 [appTranslate]="'AvailableEvents'">Available events</h3>
+            <div class="wrapper-searchsort">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" (keyup)="search(searchText)" [(ngModel)]="searchText" placeholder="{{ translateLabel('Search', 'Search') | async }}" aria-describedby="basic-addon1">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fa fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
+                    <button class="btn btn-outline-primary mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()" (click)="myDrop.open()" [appTranslate]="'SortBy'">Sort by</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownManual">
+                        <button ngbDropdownItem (click)="orderEvents('name-asc')" [appTranslate]="'AZ'">A-Z</button>
+                        <button ngbDropdownItem (click)="orderEvents('name-desc')" [appTranslate]="'ZA'">Z-A</button>
+                        <button ngbDropdownItem (click)="orderEvents('date-desc')" [appTranslate]="'Newest'">Newest</button>
+                        <button ngbDropdownItem (click)="orderEvents('date-asc')" [appTranslate]="'Oldest'">Oldest</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="error">
+        <app-errormessage
+            [serverErrorMessage]="error.message"
+            [errorMessageTranslationKey]="error.localizationKey">
+        </app-errormessage>
+    </div>
+
+    <div *ngIf="allEvents" class="container mt-5" id="all-events">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" attr.data-href="/event?id={{ event.readableEventId }}" *ngFor="let event of filteredEvents">
+                <div class="card mx-auto mb-4" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                             <a [routerLink]="['/event']" [queryParams]="{id: event.readableEventId}" title="{{ event.eventName }}" [attr.aria-label]="getAreaLabel(event)">
+                                {{ event.eventName }}</a>
+                        </h5>
+                        <h6 *ngIf="event.building" class="card-subtitle mb-2 text-dark">at {{ event.building.name }} </h6>
+                    </div>
+                    <div class="card-footer text-dark" >
+                       {{ getDateString(event) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

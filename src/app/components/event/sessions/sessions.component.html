@@ -1,0 +1,51 @@
+<div *ngIf="!sessions">
+    <app-spinner></app-spinner>
+</div>
+
+<div *ngIf="error">
+    <app-errormessage
+        [serverErrorMessage]="error.message"
+        [errorMessageTranslationKey]="error.localizationKey">
+    </app-errormessage>
+</div>
+
+<div *ngIf="sessions">
+    <p *ngIf="sessions.length === 0" class="text-center" [appTranslate]="'NoSessionsEvent'">No sessions are associated to this event.</p>
+
+    <div *ngIf="sessions.length > 0">
+        <div class="container mb-4">
+            <div class="filters mr-3 ml-3">
+                <div class="row">
+                    <div class="select-date col-sm-6 col-md-4 offset-sm-6 offset-md-8">
+                        <select class="custom-select" role="tablist" [(ngModel)]="selectedDateKey" aria-label="Choose date">
+                            <option *ngFor="let dateKey of dateKeys" value="{{dateKey}}" role="tab">
+                                {{ dateText(dateKey) | async }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <app-sessions-list-view
+            *ngIf="allowSessionRegistrations"
+            [readableEventId]="readableEventId"
+            [isEventWaitlisted]="event.showWaitlist"
+            [eventTimezone]="event.timeZone"
+            [canUserRegister]="canUserRegister()"
+            [sessions]="sessionsByDay[this.selectedDateKey]"
+            [sessionIdsInCart]="sessionIdsInCart"
+            (addToCartClicked)="addToCart($event)"
+            (removeFromCartClicked)="removeFromCart($event)">
+        </app-sessions-list-view>
+
+        <app-sessions-list-view
+            *ngIf="!allowSessionRegistrations"
+            [sessions]="sessionsByDay[this.selectedDateKey]"
+            [readableEventId]="readableEventId"
+            [eventTimezone]="event.timeZone"
+            (registerClicked)="registerToSession($event)">
+        </app-sessions-list-view>
+    </div>
+</div>

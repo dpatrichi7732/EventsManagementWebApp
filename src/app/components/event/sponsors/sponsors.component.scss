@@ -1,0 +1,43 @@
+.event-sponsors-container {
+    background: #ccc;
+    padding-bottom: 60px;
+    color: black;
+    width: 100%;
+    text-align: center;
+}
+
+.event-sponsors-container h3 {
+    padding-bottom: 30px;
+}
+
+.page-header {
+    padding-top: 30px;
+    font-size: 180%;
+    text-align: center;
+}
+
+.sponsor-image {
+    height: 100px;
+    width: 100px;
+    margin: auto;
+}
+
+.sponsor-image-container {
+    position: relative;
+}
+
+.sponsor-image-container .sponsor-image img {
+    border-radius: 50%;
+}
+
+.sponsor-image img {
+    height: 100%;
+}
+
+.sponsor-name {
+    margin-top: .6em;
+}
+
+.sponsor-title {
+    margin-bottom: 1em;
+}

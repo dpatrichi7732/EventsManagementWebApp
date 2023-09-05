@@ -1,0 +1,27 @@
+.modal-header {
+    border-bottom: 0 none;
+}
+
+.modal-footer {
+    border-top: 0 none;
+}
+
+.btn-primary {
+    background-color: #006ADB;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #005BBD;
+    border-color: #0062cc;
+}
+
+.btn-primary:focus { 
+    outline: 1px dashed transparent; 
+    outline-offset: 2px; 
+}
+
+.btn-outline-dark:focus {
+    outline: 1px dashed transparent; 
+    outline-offset: 2px; 
+}

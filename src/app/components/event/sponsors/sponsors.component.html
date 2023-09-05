@@ -1,0 +1,40 @@
+<div *ngIf="renderOnZeroSponsorships || (sponsorships != null && sponsorships.length > 0)" class="event-sponsors-container">
+    <div class="page-header">
+        <h3 [appTranslate]="'BroughtToYouBy'">Brought to you by</h3>
+    </div>
+
+    <div class="spinner-container" *ngIf="isLoading">
+        <app-spinner></app-spinner>
+    </div>
+
+    <div *ngIf="!isLoading">
+        <div *ngIf="error">
+            <app-errormessage
+                [serverErrorMessage]="error.message"
+                [errorMessageTranslationKey]="error.localizationKey">
+            </app-errormessage>
+        </div>
+
+        <div *ngIf="sponsorships">
+            <p *ngIf="sponsorships.length === 0" [appTranslate]="'NoSponsorshipsEvent'">No sponsorships are associated to this event.</p>
+
+            <div *ngIf="sponsorships.length > 0" class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-lg-2" *ngFor="let sponsor of sponsorships">
+                        <div class="sponsor-image-container">
+                            <div class="sponsor-image">
+                                <img src="{{ sponsor.logoSrc }}" alt="{{sponsor.sponsorName}}" title="{{sponsor.sponsorName}}" defaultSrc="{{ imageHelper.getImageUrl(defaultImageUrl) }}" />
+                            </div>
+                            <div *ngIf="sponsor.sponsorName !== null" class="sponsor-name">{{ sponsor.sponsorName }}</div>
+                            <div *ngIf="sponsor.sponsorName === null" class="sponsor-name" [appTranslate]="'SponsorName'">Sponsor
+                                Name</div>
+                            <div class="sponsor-title">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

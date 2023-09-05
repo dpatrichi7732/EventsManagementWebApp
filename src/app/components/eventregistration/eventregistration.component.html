@@ -1,0 +1,201 @@
+<div class="spinner-container" *ngIf="cntActiveDataRetrievals > 0">
+    <app-spinner></app-spinner>
+</div>
+
+<div class="checkout mt-5">
+    <div *ngIf="error && cntActiveDataRetrievals < 1" class="container" id="error-message" role="alert">
+        <app-errormessage
+        [serverErrorMessage]="error.message"
+        [errorMessageTranslationKey]="error.localizationKey">
+        </app-errormessage>
+    </div>
+
+    <div *ngIf="event">
+        <div *ngIf="event.registrationForm && showRegistrationForm()" class="form-registration-wrapper card col-xl-8 offset-xl-2" [style.display]="cntActiveDataRetrievals < 1 ? 'inherit' : 'none'">
+            <!-- Forms fields for waitlist and auto-register -->
+            <div *ngIf="showWaitlist() && !isAllowedToCreateNewAttendee() && isFormRegistrationLoaded()" class="waitlist text-center">
+                <div class="alert alert-warning form-waitlist-alert" [appTranslate]="'MaximumCapacityReached'" role="alert">The event's maximum capacity has been reached. You can only add attendants to the waitlist.</div>
+                <div class="waitlist-checkbox-wrapper">
+                    <div *ngIf="canUserChooseAutoRegisterFunctionality$ | async" class="centered">
+                        <div class="custom-control custom-radio waitlist-radio">
+                            <input
+                                type="radio"
+                                id="autoRegisterEnabledRadioInline"
+                                name="isAutoRegisterEnabled"
+                                class="custom-control-input"
+                                [(ngModel)]="autoRegister"
+                                [value]="true"
+                                (change)="autoRegister = true">
+                            <label class="custom-control-label" for="autoRegisterEnabledRadioInline" [appTranslate]="'EnableAutoRegisterRadioButtonText'">Auto-register and notify when space becomes available</label>
+                        </div>
+                        <div class="custom-control custom-radio waitlist-radio">
+                            <input
+                                type="radio"
+                                id="autoRegisterDisabledRadioInline"
+                                name="isAutoRegisterEnabled"
+                                class="custom-control-input"
+                                [(ngModel)]="autoRegister"
+                                [value]="false"
+                                (change)="autoRegister = false">
+                            <label class="custom-control-label" for="autoRegisterDisabledRadioInline" [appTranslate]="'DisableAutoRegisterRadioButtonText'">Notify, but don't auto-register, when space becomes available</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="marketing-form-container">
+                <div *ngIf="isFormRegistrationLoaded() && sessions && sessions.length > 0" class="sessions-spacer">
+                    <div *ngIf="isFormRegistrationLoaded() && sessions && sessions.length > 0" class="col col-lg-6 col-sm-6 registration-form-sessions-wrapper align-left">
+                        <div class="card-body">
+                            <app-session-selection [readableEventId]="readableEventId"></app-session-selection>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="registration-form" event-registration-form
+                    [eventmarketingformhtml]="event.registrationForm"
+                    [formHandler]="this">
+                </div>
+
+            </div>
+        </div>
+
+        <div *ngIf="!event.registrationForm && cntActiveDataRetrievals < 1">
+            <div *ngIf="mustUserSignIn()" class="card col-md-8 offset-md-2 col-xl-6 offset-xl-3">
+                <div class="row">
+                    <div class="card-header">
+                        <h2 class="card-title" [appTranslate]="'SignInForEventRegistration'">Sign-in for event registration</h2>
+                    </div>
+                    <div class="card-body text-center">
+                        <p [appTranslate]="'EventRegistrationSignInInfo'" id="sign-in-is-required-info">You need to sign-in to continue with the event registration.</p>
+                        <button *ngIf="!isLoginProcessActive()" [routerLink]="['/externalLogin']" [queryParams]="{id: event.readableEventId}" class="btn btn-primary btn-lg">
+                            <span class="icon-padding" [appTranslate]="'SignIn'">Sign In</span>
+                        </button>
+                        <app-spinner *ngIf="isLoginProcessActive()"></app-spinner>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!mustUserSignIn()" class="card col-md-10 offset-md-1 col-xl-8 offset-xl-2">
+                <div class="row">
+                    <div class="card-header">
+                        <h1 class="card-title" [appTranslate]="'EventRegistrationTitle'">Event Registration</h1>
+                    </div>
+                    <div class="card-body">
+                        <!-- Waitlist Registration-->
+                        <div class="waitlist" *ngIf="showWaitlist() && !isAllowedToCreateNewAttendee()">
+                            <div class="alert alert-warning" [appTranslate]="'MaximumCapacityReached'" role="alert">The event's maximum capacity has been reached. You can only add attendants to the waitlist.</div>
+                            <div class="row">
+                                <div class="col mb-2">
+                                    <h2 class="h4" [appTranslate]="'AddAttendeeToWaitlist'">Add attendee to waitlist</h2>
+                                    <!-- create new attendee in waitlist -->
+                                    <div event-attendee
+                                        [readableEventId]="readableEventId"
+                                        (onAdded)="addAttendee($event, true)"
+                                        (onValidationStatusChanged)="changeFormValidationStatus($event)"
+                                        [customRegistrationFields]="customRegistrationFields"
+                                        [passes]="passes"
+                                        [editing]="true"
+                                        [placeholder]="true"
+                                        [waitlisted]="true"
+                                        [isJapanese]="isJapanese"
+                                        [autoregisterWaitlistItems]="autoregisterWaitlistItems()"
+                                        [enableAutoRegistrationSelection]="canUserChooseAutoRegisterFunctionality$ | async"
+                                        [canceledEditing]="clearForms"
+                                        [showAddAnotherAttendee]="event.enableMultiAttendeeRegistration"
+                                        class="alternate-row"></div>
+                                </div>
+
+                                <div *ngIf="waitlistedAttendees != null && waitlistedAttendees.length > 0" class="col registered-attendee-list">
+                                    <h3 *ngIf="attendeeEditingCount === 0" class="h4" [appTranslate]="'WaitlistedAttendees'">Waitlisted attendees</h3>
+                                    <h3 *ngIf="attendeeEditingCount > 0" class="h4" [appTranslate]="'EditingWaitlistedAttendee'">Editing waitlisted attendee</h3>
+
+                                    <div class="list-group">
+                                        <!-- show existing attendees in waitlist -->
+                                        <div event-attendee
+                                            *ngFor="let attendee of waitlistedAttendees.slice().reverse()"
+                                            (onSaved)="updateAttendee($event, true)"
+                                            (onDeleted)="removeAttendee($event, true)"
+                                            [customRegistrationFields]="customRegistrationFields"
+                                            [attendee]="attendee"
+                                            [passes]="passes"
+                                            [editing]="false"
+                                            [waitlisted]="true"
+                                            [isJapanese]="isJapanese"
+                                            [showAddAnotherAttendee]="event.enableMultiAttendeeRegistration"
+                                            [autoregisterWaitlistItems]="autoregisterWaitlistItems()"
+                                            [enableAutoRegistrationSelection]="canUserChooseAutoRegisterFunctionality$ | async"
+                                            [canceledEditing]="clearForms"
+                                            class="alternate-row m-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event Registration-->
+                        <div *ngIf="!showWaitlist() || attendees.length > 0">
+                            <div class="row">
+
+                                <div *ngIf="!showWaitlist() && attendeeEditingCount === 0 && !isAllowedToCreateNewAttendee()" class="col">
+                                    <h2 class="h4" [appTranslate]="'AttendeeDetails'">Attendee details</h2>
+                                    <!-- Create new attendee form -->
+                                    <div event-attendee
+                                        [readableEventId]="readableEventId"
+                                        [passes]="passes"
+                                        [customRegistrationFields]="customRegistrationFields"
+                                        [editing]="true"
+                                        [placeholder]="true"
+                                        [waitlisted]="false"
+                                        [isJapanese]="isJapanese"
+                                        [showAddAnotherAttendee]="event.enableMultiAttendeeRegistration"
+                                        [autoregisterWaitlistItems]="autoregisterWaitlistItems()"
+                                        [enableAutoRegistrationSelection]="canUserChooseAutoRegisterFunctionality$ | async"
+                                        [canceledEditing]="clearForms"
+                                        (onAdded)="addAttendee($event, false)"
+                                        (onValidationStatusChanged)="changeFormValidationStatus($event)"
+                                        class="alternate-row"></div>
+                                </div>
+
+                                <div *ngIf="attendees != null && attendees.length > 0"
+                                    [ngClass]="{'col-lg-6': !showWaitlist() && attendeeEditingCount == 0 && !isAllowedToCreateNewAttendee()}"
+                                    class="col registered-attendee-list">
+                                    <h2 class="h4" [appTranslate]="'AssignedAttendees'">Registrations</h2>
+                                    <div class="list-group">
+                                        <!-- Read only attendees list -->
+                                        <div event-attendee
+                                            *ngFor="let attendee of attendees.slice().reverse()"
+                                            [readableEventId]="readableEventId"
+                                            [attendee]="attendee"
+                                            [customRegistrationFields]="customRegistrationFields"
+                                            [passes]="passes"
+                                            [editing]="false"
+                                            [waitlisted]="false"
+                                            [isJapanese]="isJapanese"
+                                            [showAddAnotherAttendee]="event.enableMultiAttendeeRegistration"
+                                            [enableAutoRegistrationSelection]="canUserChooseAutoRegisterFunctionality$ | async"
+                                            [canceledEditing]="clearForms"
+                                            (onSaved)="updateAttendee($event, false)"
+                                            (onDeleted)="removeAttendee($event, false)"
+                                            (editingChange)="attendeeEditingStateChanged($event)"
+                                            class="alternate-row m-2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <app-captcha [readableEventId]="readableEventId" *ngIf="event.enableCaptcha"></app-captcha>
+                        <div *ngIf="registrationInProgress" class="full-size-spinner-container p-5">
+                            <app-spinner></app-spinner>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary btn-lg pull-right" (click)="checkout()" [attr.disabled]="isCheckoutButtonDisabled() ? '' : null">
+                            <span *ngIf="!registrationInProgress" [appTranslate]="'Checkout'"><span class="fa fa-shopping-cart"></span> Checkout</span>
+                            <span *ngIf="registrationInProgress" [appTranslate]="'Processing'"><span class="fa fa-spinner fa-spin"></span> Processing</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

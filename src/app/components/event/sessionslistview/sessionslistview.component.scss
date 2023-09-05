@@ -1,0 +1,39 @@
+﻿.container {
+    max-height: inherit;
+}
+
+.sessions-list {
+    max-height: inherit;
+    overflow-y: auto;
+
+    .session-name {
+        word-break: break-word;
+    }
+}
+
+.speaker-image img {
+    border-radius: 50%;
+}
+
+.speaker-image img {
+    height: 30px;
+}
+
+.btn-primary {
+    background-color: #006ADB;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #005BBD;
+    border-color: #0062cc;
+}
+
+.btn-primary:focus { 
+    outline: 1px dashed transparent; 
+    outline-offset: 2px; 
+}
+
+.btn-link:focus {
+    outline: -webkit-focus-ring-color auto 5px;
+}

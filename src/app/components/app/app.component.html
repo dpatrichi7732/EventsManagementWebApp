@@ -1,0 +1,7 @@
+<nav-menu *ngIf="labelsService.labelsLoaded()"></nav-menu>
+
+<main role="main" class="body-content" *ngIf="labelsService.labelsLoaded()">
+    <router-outlet></router-outlet>
+</main>
+
+<app-footer *ngIf="labelsService.labelsLoaded()"></app-footer>

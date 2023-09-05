@@ -1,0 +1,97 @@
+<div class="spinner-container" *ngIf="cntActiveDataRetrievals > 0">
+    <app-spinner></app-spinner>
+</div>
+
+<div *ngIf="cntActiveDataRetrievals === 0">
+    <div class="container">
+        <div class="page-header">
+            <h1 [appTranslate]="'MyRegistrations'">My registrations</h1>
+        </div>
+        <div class="alert alert-secondary" [appTranslate]="'WaitForRegistrationsToAppear'">Please note there can be a delay in processing your registrations.</div>
+    </div>
+    <div class="separator"></div>
+
+    <div *ngIf="errorMessage" class="container">
+        <app-errormessage
+            [serverErrorMessage]="error.message"
+            [errorMessageTranslationKey]="error.localizationKey">
+        </app-errormessage>
+    </div>
+
+    <div class="container" *ngIf="!registrations || registrations.length == 0">
+        <div class="myRegistrations"><span [appTranslate]="'NoRegistrationsFound'">No registrations found</span></div>
+    </div>
+
+    <div class="container" *ngIf="registrations && registrations.length > 0">
+        <div class="accordion" id="accordionId">
+            <ng-template ngFor let-i="index" let-registration [ngForOf]="registrations">
+                <div class="card">
+                    <div class="card-body" data-toggle="collapse" [attr.id]="'heading' + i" [attr.data-target]="'#collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i">
+                        <div class="d-flex display-button">
+                            <div class="set-min-width">
+                                <div class="w-100 justify-content-between">
+                                    <div class="mb-1">
+                                        <h2 class="text-truncate h5">
+                                            <span class="mr-2">{{ registration.event }}</span>
+                                            <span class="h6">
+                                                <span *ngIf="registration.sessionRegistrations != null && registration.sessionRegistrations.length > 0" class="badge badge-primary badge-pill showMore" [appTranslate]="'ShowSessions'">show sessions</span>
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div>
+                                        <label class="mb-0 text-truncate set-max-width"><b [appTranslate]="'Name'">Name</b><b>:</b> {{ registration.contact }}</label>
+                                    </div>
+                                    <div>
+                                            <label class="mb-0 text-truncate set-max-width"><b [appTranslate]="'Email'">Email</b><b class="mr-1">:</b>{{ registration.email }}</label>
+                                    </div>
+                                    <div *ngIf="registration.pass != ''">
+                                        <label class="mb-0"><b [appTranslate]="'Pass'">Pass</b><b>:</b> {{ registration.pass }}</label>
+                                    </div>
+                                    <div>
+                                        <label class="mb-0"><b [appTranslate]="'RegisteredSince'">Registered since</b><b>:</b> {{ formatDate(registration.createdon) }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ml-auto align-self-center button-large">
+                                <button type="button" id="cancelButton-{{i}}" (click)="open(registration, i)" class="btn btn-danger button-large" [appTranslate]="'Cancel'">Cancel</button>
+                        </div>
+                        </div>
+                    </div>
+                    <div [attr.id]="'collapse' + i" class="collapse" [attr.aria-labelledby]="'heading' + i" data-parent="#accordionId" *ngIf="registration.sessionRegistrations != null && registration.sessionRegistrations.length > 0">
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-action flex-column align-items-start" *ngFor="let sessionRegistration of registration.sessionRegistrations">
+                                    <div class="d-flex">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h3 class="session-name h6 mb-1">{{sessionRegistration.sessionName}}</h3>
+                                        </div>
+                                        <div class="ml-auto align-self-center">
+                                            <button type="button" (click)="open(sessionRegistration, i)" class="btn btn-danger btn-sm" [appTranslate]="'Cancel'">Cancel</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 [appTranslate]="'MyWaitlistItems'">My waitlist items</h1>
+        </div>
+    </div>
+    <div class="separator"></div>
+
+    <div class="container" *ngIf="!waitlistItems || waitlistItems.length == 0">
+        <div class="myRegistrations"><span [appTranslate]="'NoWaitlistItemsFound'">No waitlist items found</span></div>
+    </div>
+
+    <div class="container" *ngIf="waitlistItems && waitlistItems.length > 0">
+        <div *ngFor="let waitlistItem of waitlistItems">
+            <app-waitlist-item-card [waitlistItem]="waitlistItem"></app-waitlist-item-card>
+        </div>
+    </div>
+</div>

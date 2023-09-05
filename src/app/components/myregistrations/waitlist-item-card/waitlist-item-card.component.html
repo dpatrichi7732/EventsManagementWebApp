@@ -1,0 +1,41 @@
+<div *ngIf="waitlistItem" class="card m-3">
+    <div class="card-body m-2">
+        <h5 class="card-title mb-1">
+            <h2 *ngIf="waitlistItem.session == null || waitlistItem.session ==''" class="h5">
+                <span class="mr-2">{{ waitlistItem.event }}</span>
+                <span class="h6">
+                    <span class="badge badge-pill badge-info" [appTranslate]="'Event'">Event</span>
+                </span>
+            </h2>
+            <h2 *ngIf="waitlistItem.session != null && waitlistItem.session !=''" class="h5">
+                <span class="mr-2">{{ waitlistItem.session }}</span>
+                <span class="h6">
+                    <span class="badge badge-pill badge-info" [appTranslate]="'Session'">Session</span>
+                </span>
+            </h2>
+        </h5>
+        <div class="card-text">
+            <p *ngIf="waitlistItem.event != null && waitlistItem.session != null && waitlistItem.session !=''"
+                class="mb-0 text-truncate set-max-width">
+                <b [appTranslate]="'Event'">Event</b>
+                <b class="mr-1">:</b>
+                <span>{{ waitlistItem.event }}</span>
+            </p>
+            <p class="mb-0 text-truncate set-max-width">
+                <b [appTranslate]="'Name'">Name</b>
+                <b class="mr-1">:</b>
+                <span>{{ waitlistItem.contact }}</span>
+            </p>
+            <p class="mb-0 text-truncate set-max-width">
+                <b [appTranslate]="'Email'">Email</b>
+                <b class="mr-1">:</b>
+                <span>{{ waitlistItem.email }}</span>
+            </p>
+            <p class="mb-0">
+                <b [appTranslate]="'AddedSince'">Registered since</b>
+                <b class="mr-1">:</b>
+                <span>{{ formatDate(waitlistItem.createdon) }}</span>
+            </p>
+        </div>
+    </div>
+</div>

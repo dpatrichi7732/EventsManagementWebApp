@@ -1,0 +1,86 @@
+<p *ngIf="sessions && sessions.length == 0" [appTranslate]="'NoSessionsAssigned'">
+    There are no sessions assigned.
+</p>
+
+<div class="container" *ngIf="sessions && sessions.length > 0">
+    <div class="sessions-list list-group">
+        <div *ngFor="let session of sessions" (click)="expandSession(session)" class="list-group-item list-group-item-action flex-column align-items-start" tabindex="0">
+            <div class="d-flex">
+                <div class="">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="session-name mb-1">{{ session.name }}</h5>
+                    </div>
+                    <div *ngIf="showWaitlistBadge(session)" class="h5">
+                        <span class="badge badge-primary" [appTranslate]="'Waitlist'">Waitlist</span>
+                    </div>
+                    <small class="text-muted">
+                        {{ getDateString(session) }}
+                    </small>
+                    <small class="text-muted">
+                        <div>
+                            <span *ngIf="session.room != null && session.room.name != ''">
+                                {{ session.room.name }} @
+                            </span>
+                            <span *ngIf="session.building != null && session.building.name != ''">
+                                {{ session.building.name }}
+                            </span>
+                        </div>
+                    </small>
+                    <small *ngIf="showWaitlistBadge(session)" class="text-muted font-weight-light" [appTranslate]="'OnlyWaitlistRegistrationPossibleText'">New registrants will be added to the waitlist for this session.</small>
+                    <div class="mb-1" *ngIf="isSessionExpanded(session)">
+                        <p class="mb-1" *ngIf="session.sessionSummary != null && session.sessionSummary != ''">
+                            {{ session.sessionSummary }}
+                        </p>
+                        <p class="mb-1" *ngIf="session.detailedDescription != null && session.detailedDescription != ''">
+                            {{ session.detailedDescription }}
+                        </p>
+                        <div class="mb-1" *ngIf="session.speakers != null && session.speakers.length > 0">
+                            <div *ngFor="let speaker of session.speakers" class="d-flex flex-row bd-highlight">
+                                <div class="speaker-image p-2 bd-highlight">
+                                    <img src="{{ imageHelper.getImage(speaker.image, speaker.imageUrl) }}" defaultSrc="{{ imageHelper.getImageUrl(defaultImageUrl) }}" />
+                                </div>
+                                <div class="p-2 bd-highlight">
+                                    <a [routerLink]="['/event', EventDetailSections.Speakers]" [queryParams]="{id: readableEventId, speakerId: speaker.id}">
+                                        {{ speaker.name }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="canUserRegister" class="ml-auto align-self-center">
+                    <button *ngIf="showFullBadge(session)" class="btn btn-danger d-none d-sm-block" [disabled]= "true">
+                            <span class="" [appTranslate]="'SessionFullyBooked'">Fully booked</span>
+                    </button>
+                    <!-- Add to cart -->
+                    <div *ngIf="isAddToCartAllowed() && !isSessionRegistered(session) && !showFullBadge(session)"  (click)="$event.stopPropagation(); addToCart(session)">
+                        <button type="button" class="btn btn-primary d-none d-sm-block" id="{{ 'btn-add-session-to-cart-' + session.id }}">
+                            <span class="" [appTranslate]="'AddSessionToCart'">Add Session</span>
+                        </button>
+                        <button class="btn btn-link d-block d-sm-none" type="button" aria-label="Add session to cart">
+                            <span class="close" aria-hidden="true">+</span>
+                        </button>
+                    </div>
+
+                    <!-- Remove from cart -->
+                    <button
+                        *ngIf="isRemoveFromCartAllowed() && isSessionRegistered(session)"
+                        (click)="$event.stopPropagation(); removeFromCart(session)"
+                        type="button"
+                        class="btn btn-link"
+                        title="{{ translateLabel('RemoveSession', 'Remove session') | async }} {{ session.name }}">
+                        <span class="close" aria-hidden="true">×</span>
+                    </button>
+
+                    <!-- Register -->
+                    <div *ngIf="isRegisterAllowed(session)">
+                            <button *ngIf="!session.alreadyRegistered" (click)="register(session)"
+                                [appTranslate]="'Register'" type="button" class="btn btn-info">Register</button>
+                            <button *ngIf="session.alreadyRegistered"[appTranslate]="'AlreadyRegistered'" disabled="disabled" type="button"
+                            type="button" class="btn btn-info">Already registered</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

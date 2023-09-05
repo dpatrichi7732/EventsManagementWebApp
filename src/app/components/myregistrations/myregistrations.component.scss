@@ -1,0 +1,46 @@
+.spinner-container {
+    min-height: 1000px;
+    padding-top: 450px;
+}
+
+.page-header {
+    padding-top: 30px;
+    margin: 42px 0 21px;
+}
+
+.myRegistrations {
+    margin-top: 50px;
+}
+
+.active-row {
+    background-color: rgba(0,0,0,.05);
+}
+
+.details-row {
+    padding-left: 2rem;
+}
+
+.showMore {
+    cursor: pointer;
+}
+
+.set-min-width {
+    min-width: 0;
+}
+
+.set-max-width {
+    max-width: 100%;
+}
+@media (max-width: 768px) {
+
+    .display-button {
+        flex-direction: column;
+
+    }
+
+    .button-large{
+        width: 100%;
+        padding-top: 10px;
+    }
+
+}

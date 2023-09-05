@@ -1,0 +1,8 @@
+.required::after {
+    content: ' *';
+    color: red;
+}
+
+.form-check label {
+    margin-left: 0.5rem;
+}

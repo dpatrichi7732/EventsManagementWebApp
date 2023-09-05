@@ -1,0 +1,17 @@
+<div class="modal-content" role="dialog">
+  <div class="modal-header">
+    <h4 class="modal-title" [appTranslate]="getTranslationForTitle()" role="banner" [attr.aria-describedBy]="getTranslationForTitle()" aria-live="polite">{{ title }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.close('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p role="alert" aria-live="polite">
+      {{ translateLabelWithParams(getTranslationForMessage(), getMessage(), getExtraParams()) | async }}
+    </p>
+  </div>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-primary pull-right" #actionButton id="actionButton" (click)="activeModal.close('Action executed')" [appTranslate]="getTranslationForPrimaryButton()">{{primaryButton}}</button>
+  <button type="button" class="btn btn-outline-dark" #closeButton (click)="activeModal.close('Close click')" [appTranslate]="getTranslationForSecondaryButton()">{{secondaryButton}}</button>
+  </div>
+</div>

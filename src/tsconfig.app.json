@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "types": ["node"]
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts",
+    "environments/environment.azure.ts",
+    "environments/environment.d365.ts",
+    "environments/environment.selfhosted.ts",
+  ]
+}

@@ -1,0 +1,90 @@
+<!-- Custom registration fields -->
+<form #customRegistrationFieldsForm="ngForm" novalidate>
+    <div class="custom-registration-fields">
+        <div class="row">
+            <div class="col mb-2">
+                <div class="" *ngIf="customRegistrationFields && customRegistrationFields.length > 0">
+                    <div *ngFor="let customRegistrationField of customRegistrationFields">
+                        <!-- Simple Text -->
+                        <div *ngIf="customRegistrationField.type == CustomRegistrationFieldTypes.SimpleText" class="field-container">
+                            <div class="form-group">
+                                <label [class]="customRegistrationField.isRequired ? 'required' : ''" [for]="customRegistrationField.customRegistrationFieldId">{{ customRegistrationField.text }}</label>
+                                <input type="text"
+                                       [(ngModel)]="customRegistrationField.value"
+                                       [name]="customRegistrationField.customRegistrationFieldId"
+                                       [id]="customRegistrationField.customRegistrationFieldId"
+                                       [required]="customRegistrationField.isRequired"
+                                       class="form-control" />
+                            </div>
+                        </div>
+
+                        <!-- Boolean -->
+                        <div class="field-container" *ngIf="customRegistrationField.type ==  CustomRegistrationFieldTypes.Boolean">
+                            <label [class]="customRegistrationField.isRequired ? 'required' : ''">{{ customRegistrationField.text }}</label>
+                               <div class="form-check">
+                                  <div *ngIf="!customRegistrationField.isRequired">
+                                    <input type="radio"
+                                            [(ngModel)]="customRegistrationField.value"
+                                            [id]="customRegistrationField.customRegistrationFieldId + '-nochoice'"
+                                            [name]="customRegistrationField.customRegistrationFieldId"
+                                            ng-value="NoChoice" >
+                                    <label [appTranslate]="'NoChoice'" [for]="customRegistrationField.customRegistrationFieldId + '-nochoice'">No Choice</label>
+                                  </div>
+                                   <div>
+                                    <input type="radio"
+                                           [(ngModel)]="customRegistrationField.value"
+                                           [id]="customRegistrationField.customRegistrationFieldId + '-yes' "
+                                           [name]="customRegistrationField.customRegistrationFieldId"
+                                           value="Yes">
+                                    <label [appTranslate]="'Yes'" [for]="customRegistrationField.customRegistrationFieldId + '-yes'">Yes</label>
+                                </div>
+                                <div>
+                                    <input type="radio"
+                                           [(ngModel)]="customRegistrationField.value"
+                                           [id]="customRegistrationField.customRegistrationFieldId + '-no' "
+                                           [name]="customRegistrationField.customRegistrationFieldId"
+                                           value="No">
+                                    <label [appTranslate]="'No'" [for]="customRegistrationField.customRegistrationFieldId + '-no'">No</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Multiple Choice -->
+                        <div class="field-container" *ngIf="customRegistrationField.type == CustomRegistrationFieldTypes.MultipleChoice">
+                            <div class="form-group">
+                                <label [class]="customRegistrationField.isRequired ? 'required' : ''">{{ customRegistrationField.text }}</label>
+                                <select multiple
+                                        [(ngModel)]="customRegistrationField.value"
+                                        [id]="customRegistrationField.customRegistrationFieldId"
+                                        [name]="customRegistrationField.customRegistrationFieldId"
+                                        [required]="customRegistrationField.isRequired"
+                                        class="form-control">
+                                    <option *ngFor="let choice of customRegistrationField.choicesArray" [ngValue]="choice">
+                                        {{ choice }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Single Choice -->
+                        <div class="field-container" *ngIf="customRegistrationField.type == CustomRegistrationFieldTypes.SingleChoice">
+                            <div class="form-group">
+                                <label [class]="customRegistrationField.isRequired ? 'required' : ''" [for]="customRegistrationField.customRegistrationFieldId">{{ customRegistrationField.text }}</label>
+                                <select [(ngModel)]="customRegistrationField.value"
+                                        [id]="customRegistrationField.customRegistrationFieldId"
+                                        [name]="customRegistrationField.customRegistrationFieldId"
+                                        [required]="customRegistrationField.isRequired"
+                                        class="form-control">
+                                    <option *ngFor="let choice of customRegistrationField.choicesArray" [ngValue]="choice">
+                                        {{ choice }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

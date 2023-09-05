@@ -1,0 +1,59 @@
+nav {
+    z-index: 1;
+
+    &.navbar {
+        border-radius: 0px;
+        border-width: 0px;
+    }
+
+    .navbar-toggler {
+        margin-right: 10px;
+    }
+
+    #navbarCollapse {
+        min-width: 0;
+        padding-left: 10px;
+        border-left: 2px solid #fdfdfd;
+    }
+}
+
+.session-cart-opener {
+    .session-cart-count-badge {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: red;
+        color: #fff;
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        width: 18px;
+        height: 18px;
+        transform: translate(20px, 5px);
+    }
+}
+
+.event-title {
+    min-width: 0;
+}
+
+.event-title-label {
+        max-width: 100%;
+}
+
+#languages-dropdown {
+    color: #fff;
+}
+
+#signin-link {
+    color: #fff;
+}
+
+.btn-outline-primary:focus {
+    outline: 1px dashed transparent; 
+    outline-offset: 2px; 
+}
+
+#account-link {
+    color: #fff;
+}

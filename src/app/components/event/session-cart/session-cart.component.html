@@ -1,0 +1,26 @@
+<div class="m-3" *ngIf="isSessionCartVisible" cdkTrapFocus>
+    <div (click)="collapse()" class="session-cart-backdrop"></div>
+    <div class="session-cart" role="main" title="{{ translateLabel('SessionCartHeader', 'Session Cart') | async }}">
+        <div class="modal-header">
+            <h4 class="h4" [appTranslate]="'SessionCartHeader'">Session Cart</h4>
+            <button #closeButton type="button" class="close" aria-label="Close" (click)="collapse()">
+                <span aria-hidden="true">&times;</span>
+             </button>
+        </div>
+        <div class="sessions-wrapper">
+            <app-sessions-list-view
+                [readableEventId]="readableEventId"
+                [sessions]="sessionsCart"
+                [sessionIdsInCart]="sessionIdsInCart"
+                [isEventWaitlisted]="event.showWaitlist"
+                [eventTimezone]="event.timeZone"
+                (removeFromCartClicked)="removeSessionFromCart($event)"
+                class="container">
+            </app-sessions-list-view>
+        </div>
+        <div class="footer p-3">
+            <button  #sessionCartButton [routerLink]="['registration']" [queryParams]="{id: readableEventId}" class="btn btn-primary btn-lg btn-block"
+                [disabled]="sessionCartCount() == 0" [appTranslate]="'FinishRegistration'">Finish Registration</button>
+        </div>
+    </div>
+</div>

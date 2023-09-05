@@ -1,0 +1,71 @@
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: #4396D3;
+    background-color: #4396D3;
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #008CBA;
+    cursor: pointer;
+}
+
+.control-btn:disabled {
+    color: #555555;
+    cursor: not-allowed;
+}
+
+input.ng-invalid.ng-touched {
+    border-color: red;
+}
+
+select.ng-invalid.ng-touched {
+    border-color: red;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+.disabled-switch input:checked + .slider {
+    background-color: #9dc9ec;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.icon-padding {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.selected-sessions {
+    max-height: 320px;
+}
+
+.custom-control-label-input {
+    padding: 4px;
+}
+
+.input-label {
+    font-weight: 500;
+}
+
+.btn-primary:focus { 
+    outline: 1px dashed transparent; 
+    outline-offset: 2px; 
+}
+
+.btn-outline-secondary:focus {
+    outline: 1px dashed transparent; 
+    outline-offset: 2px; 
+}

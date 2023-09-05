@@ -1,0 +1,18 @@
+:host {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 2;
+}
+
+.body-content {
+    padding-top: 56px;
+    padding-bottom: 160px;
+
+    @media (max-width: 767px) {
+            padding-top: 50px;
+    }
+}

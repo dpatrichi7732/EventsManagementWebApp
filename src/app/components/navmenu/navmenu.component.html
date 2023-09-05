@@ -1,0 +1,91 @@
+<nav class='navbar navbar-expand-sm navbar-dark bg-dark fixed-top'>
+    <a class="navbar-brand pr-3 mr-auto" [routerLink]="['/']" [appTranslate]="'Home'" id="home-button">Home</a>
+
+    <a *ngIf="showCartItem" class='ml-3 mr-3 d-block d-sm-none'>
+        <button (click)="toggleSessionCart()" class="btn btn-outline-primary session-cart-opener">
+            <i class="fa fa-shopping-cart" aria-hidden="true">
+            </i>
+            <span class="badge session-cart-count-badge">{{ sessionCartCount }}</span>
+        </button>
+    </a>
+
+    <button (click)="toggleNavbar()" type="button" class="navbar-toggler" data-target="navbarCollapse" data-toggle="collapse"
+        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div [ngClass]="{'show': navbarOpen}" class='navbar-collapse collapse' id='navbarCollapse'>
+        <ul class='navbar-nav mr-auto event-title' *ngIf="activeEvent">
+            <li class='nav-item event-title-label' [routerLinkActive]="['link-active']">
+                <a class="navbar-brand d-sm-block text-truncate" [routerLink]="['/event']" [queryParams]="{id: activeEvent.readableEventId}">
+                    {{ activeEvent.eventName }}
+                </a>
+            </li>
+        </ul>
+        <ul class='navbar-nav ml-auto'>
+            <li class="nav-item dropdown text-nowrap" *ngIf="showLanguageDropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="languages-dropdown" role="button">
+                    <span [appTranslate]="'ChangeLanguage'">Change Language</span>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right pre-scrollable">
+                    <li class='nav-item' (click)="supportedLanguageChanged(supportedLanguage.lcid);" *ngFor="let supportedLanguage of supportedLanguages$ | async" >
+                                <a class="dropdown-item" href="#">
+                                    <span>{{supportedLanguage.label}}</span>
+                                </a>
+                            </li>
+                </ul>
+            </li>
+
+            <li class='nav-item text-nowrap' [routerLinkActive]="['link-active']" *ngIf="user.isAnonymous && showUserMenu">
+                <a class="nav-link" [routerLink]="['/externalLogin']" *ngIf="!activeEvent" id="signin-link">
+                    <span [appTranslate]="'SignIn'">Sign In</span>
+                </a>
+                <a class="nav-link" [routerLink]="['/externalLogin']" *ngIf="activeEvent" [queryParams]="{id: activeEvent.readableEventId}" id="signin-link">
+                    <span [appTranslate]="'SignIn'">Sign In</span>
+                </a>
+            </li>
+
+            <li class="nav-item text-nowrap dropdown" *ngIf="!user.isAnonymous && showUserMenu">
+                <a class="nav-link dropdown-toggle text-nowrap" data-toggle="dropdown" href="#" id="account-link">
+                    <span *ngIf="user.firstName">{{ user.firstName }}</span>
+                    <span *ngIf="!user.firstName" [appTranslate]="'MyAccount'">My Account</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li class='nav-item' [routerLinkActive]="['link-active']">
+                        <a class="dropdown-item" [routerLink]="['/myregistrations']">
+                            <span [appTranslate]="'MyRegistrations'">My registrations</span>
+                        </a>
+                    </li>
+                    <li class='nav-item' [routerLinkActive]="['link-active']" *ngIf="showProfile">
+                        <a class="dropdown-item" [routerLink]="['/externalProfile']" *ngIf="!activeEvent">
+                            <span [appTranslate]="'Profile'">Profile</span>
+                        </a>
+                        <a class="dropdown-item" [routerLink]="['/externalProfile']" *ngIf="activeEvent" [queryParams]="{id: activeEvent.readableEventId}">
+                            <span [appTranslate]="'Profile'">Profile</span>
+                        </a>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <li class='nav-item' id="sign-out-button" [routerLinkActive]="['link-active']">
+                        <a class="dropdown-item" [routerLink]="['/externalLogout']" *ngIf="!activeEvent">
+                            <span [appTranslate]="'SignOut'">Sign Out</span>
+                        </a>
+                        <a class="dropdown-item" [routerLink]="['/externalLogout']" *ngIf="activeEvent" [queryParams]="{id: activeEvent.readableEventId}">
+                            <span [appTranslate]="'SignOut'">Sign Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li *ngIf="showCartItem" class='ml-3 mr-3 d-none d-sm-block'>
+                <button (click)="toggleSessionCart()" class="btn btn-outline-primary session-cart-opener" title="{{ translateLabel('SessionCartHeader', 'Session Cart') | async }}">
+                    <i class="fa fa-shopping-cart" aria-hidden="true">
+                    </i>
+                    <span class="badge session-cart-count-badge">{{ sessionCartCount }}</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+</nav>

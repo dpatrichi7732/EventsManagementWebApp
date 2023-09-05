@@ -1,0 +1,92 @@
+.session-schedule-grid {
+    clear: both;
+    margin-bottom: 5em;
+}
+
+.page-header {
+    padding-top: 30px;
+    margin: 42px 0 21px;
+}
+
+.timeline-header {
+    height: 3em;
+    background: black;
+    color: white;
+}
+
+.timeline {
+    position: relative;
+}
+
+.flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.session {
+    position: absolute;
+    height: 12em;
+    border: 1px solid black;
+    background: #0b80d0;
+    color: white !important;
+    cursor: pointer;
+    text-align: center;
+}
+
+.timeline-header .hour {
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid #888;
+    background: #545454;
+    height: 3em;
+}
+
+.flex > div {
+    flex: 1 1 auto;
+    width: 30px;
+    transition: width 0.7s ease-out;
+}
+
+#sessionScheduleContainer {
+    padding-top: 30px;
+}
+
+.interval {
+    height: 12em;
+}
+
+.hour {
+    height: 12em;
+    border: 1px dashed #d1d1d1;
+}
+
+.session-title {
+    margin-top: 1em;
+}
+
+.nav-link {
+    background-color: inherit !important;
+    cursor: pointer;
+    color: black;
+}
+
+.nav-link:focus {
+    outline: none;
+}
+
+.nav-link.active {
+    border-bottom-color: #f8f9fa;
+}
+
+.filter-dropdowns {
+    float: right;
+    margin-right: 15px;
+}
+
+.active-row {
+    background-color: rgba(0,0,0,.05);
+}
+
+.details-row {
+    padding-left: 2rem;
+}
